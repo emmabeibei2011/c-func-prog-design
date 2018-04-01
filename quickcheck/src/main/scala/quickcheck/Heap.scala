@@ -32,11 +32,18 @@ trait BinomialHeap extends Heap {
   case class Node(x: A, r: Rank, c: List[Node])
   override type H = List[Node]
 
-  protected def root(t: Node) = t.x
-  protected def rank(t: Node) = t.r
+  protected def root(t: Node) = t.x         // t.val
+  protected def rank(t: Node) = t.r         // t.rank
+
+  // Link two nodes creating a new node
+  // Node is the min(t1.x, t2.x)
+  // Rank is the rank of smaller + 1
+  // Add bigger to the head of list
   protected def link(t1: Node, t2: Node): Node = // t1.r==t2.r
     if (ord.lteq(t1.x,t2.x)) Node(t1.x, t1.r+1, t2::t1.c) else Node(t2.x, t2.r+1, t1::t2.c)
-  protected def ins(t: Node, ts: H): H = ts match {
+
+
+  protected def ins(t: Node, ts: H): H = ts match {             // Insert Node into Heap
     case Nil => List(t)
     case tp::ts => // t.r<=tp.r
       if (t.r<tp.r) t::tp::ts else ins(link(t, tp), ts)
